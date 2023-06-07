@@ -1,8 +1,6 @@
 using FluentAssertions;
 using Newtonsoft.Json;
 using PowerplantProduction.Services.ProductionPlan;
-using PowerplantProduction.Tests.Utilities;
-using System.Threading;
 using Xunit;
 
 namespace PowerplanProduction.Tests
@@ -30,7 +28,7 @@ namespace PowerplanProduction.Tests
 
         [Theory]
         [InlineData("payloads/payload4.json")]
-        public async Task Handle_WhenCalledWithEmptyPowerPlans_WillReturnException(string payload)
+        public async Task Handle_WhenCalledWithEmptyPowerPlans_WillThrowException(string payload)
         {
             // Setup
             var request = JsonConvert.DeserializeObject<ProductionPlanRequest>(File.ReadAllText(payload));
