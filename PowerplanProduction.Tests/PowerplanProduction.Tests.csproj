@@ -27,4 +27,19 @@
     <ProjectReference Include="..\PowerplantPrduction.Services\PowerplantProduction.Services.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Payloads\payload1.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Payloads\payload2.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Payloads\payload3.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Payloads\payload4.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

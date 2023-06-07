@@ -10,12 +10,12 @@ namespace PowerplantProduction.Services.ProductionPlan
         public async Task<ProductionPlanResponse> Handle(ProductionPlanRequest request, CancellationToken cancellationToken)
         {
             var fuelPowerplants = new List<PowerPlantCost>();
-            int targetLoadWithWind = request.Load;
+            int targetLoad = request.Load;
             List<PowerPlantOutput> minimalCostCombination = new List<PowerPlantOutput>();
 
             SortPowerPlants(request, fuelPowerplants);
 
-            var combinationCosts = GetCombinationCosts(request, fuelPowerplants, targetLoadWithWind);
+            var combinationCosts = GetCombinationCosts(request, fuelPowerplants, targetLoad);
 
             var minimalCombination = combinationCosts.OrderBy(obj => obj.TotalCost).First();
 
@@ -34,14 +34,14 @@ namespace PowerplantProduction.Services.ProductionPlan
             };
         }
 
-        private List<CombinationCosts> GetCombinationCosts(ProductionPlanRequest request, List<PowerPlantCost> fuelPowerplants, int targetLoadWithWind)
+        private List<CombinationCosts> GetCombinationCosts(ProductionPlanRequest request, List<PowerPlantCost> fuelPowerplants, int targetLoad)
         {
             var combinationCosts = new List<CombinationCosts>();
 
             for (int i = 0; i < fuelPowerplants.Count; i++)
             {
                 var powerPlant = fuelPowerplants[i];
-                var power = GetPowerProduced(powerPlant.PowerPlant.Pmax, targetLoadWithWind, powerPlant.PowerPlant.Type == Enums.PowerplantType.WindTurbine ? request.Fuels.Wind : null);
+                var power = GetPowerProduced(powerPlant.PowerPlant.Pmax, targetLoad, powerPlant.PowerPlant.Type == Enums.PowerplantType.WindTurbine ? request.Fuels.Wind : null);
 
                 var combination = new CombinationCosts
                 {
@@ -57,7 +57,7 @@ namespace PowerplantProduction.Services.ProductionPlan
                     TotalCost = powerPlant.Cost * power
                 };
 
-                var currentLoad = targetLoadWithWind - combination.PowerPlantCosts[0].Power;
+                var currentLoad = targetLoad - combination.PowerPlantCosts[0].Power;
 
                 for (int j = 0; j < fuelPowerplants.Count && currentLoad > 0; j++)
                 {
@@ -106,7 +106,7 @@ namespace PowerplantProduction.Services.ProductionPlan
             fuelPowerPlants.Sort((a, b) => a.Cost.CompareTo(b.Cost));
         }
 
-       
+
         private int GetPowerProduced(int pmax, int targetload, int? wind = null)
         {
             int powerProduced;
